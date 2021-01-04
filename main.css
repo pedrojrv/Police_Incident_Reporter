@@ -1,0 +1,8 @@
+/* Show it's not fixed to the top */
+body {
+  min-height: 75rem;
+}
+
+object {
+  height: 600px;
+}
