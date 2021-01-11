@@ -73,7 +73,7 @@ with open("../index.html", "r") as f1:
 with open("../table.html", "r") as f2:
     t2 = f2.readlines()
 
-initial = 78
+initial = 79
 for i in range(0,len(t2)):
     t1.insert(initial, t2[i])
     initial = initial + 1
