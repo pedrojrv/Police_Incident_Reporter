@@ -73,7 +73,7 @@ with open("../index.html", "r") as f1:
 with open("../table.html", "r") as f2:
     t2 = f2.readlines()
 
-initial = 70
+initial = 78
 for i in range(0,len(t2)):
     t1.insert(initial, t2[i])
     initial = initial + 1
@@ -129,3 +129,12 @@ fig = px.choropleth_mapbox(latest, geojson=data, locations='Neighborhood', color
                           )
 fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
 fig.write_html("../plotly_map.html")
+
+results_df["Count"] = 1
+incident_category = results_df.groupby("incident_category")[["Count"]].sum().reset_index().sort_values(by="Count", ascending=False).head(10)
+
+fig = px.bar(incident_category, x='incident_category', y='Count', 
+             labels={"incident_category":"Incident Category"}, color="Count", opacity=1.0)
+fig.update_layout(margin={"r":0,"t":40,"l":0,"b":0})
+fig.update_layout({'plot_bgcolor': 'rgba(0, 0, 0, 0)', 'paper_bgcolor': 'rgba(0, 0, 0, 0)'})
+fig.write_html("../incident_category.html")
