@@ -2,7 +2,7 @@
 
 This repository hosts an unofficial SFPD incident reporter website:
 
-- https://pedrojrv.github.io/Police_Incident_Reporter/
+- https://pedrojrv.github.io/sfpd_incident_reporter/
 
 This website was created for educational purposes. The database is updated daily at 10:00 AM PST. The repository, and consequently the website, are also udpated daily by simply running the `src/updater.py` script. More information on the official dataset can be found in the following websites:
 
