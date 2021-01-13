@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>San Francisco Crime and Incident Reporter</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/main.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4 fixed-top">
+      <a class="navbar-brand" href="#">SFPD Incident Reporter</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="main.html">Code</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/pedrojrv/Police_Incident_Reporter/tree/gh-pages">GitHub</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    
+    <!-- <div class="jumbotron">
+      <div class="container">
+        <h1 class="display-3">Hello, world!</h1>
+        <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+        <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more »</a></p>
+      </div>
+    </div> -->
+
+    <main role="main">
+
+      
+      <div class="jumbotron">
+        <h1 class="display-3">SFPD Incident and Crime Reporter</h1>
+        <p class="lead">
+          This webiste provides information on the latest SFPD-reported incidents and crimes in San Francisco. This page updates daily and was 
+          created for educational purposes. To provide the information presented here, the SFPD database is queried daily. Additionally, an AI-powered 
+          model is used to present predictions on possible future crime rates. 
+        </p>
+      </div>
+
+      <div class="container">
+        <h1>Daily Crime Rate in San Francisco</h1>
+        <p>
+          The following graph shows the daily crime rate in the entire San Francisco area, the five-day average, and the AI-powered model predictions.
+          The most recent crime rates are not to be taken accurately. The incidents are not always reported in a timely manner by the SFPD.
+        </p>
+        <canvas class="my-4" id="total_chart" width="900" height="380"></canvas>
+      </div>
+
+      <div class="container">
+        <h1>Crime Rate Chloropleth Map</h1>
+        <p>This map shows the weekly crime rate in each police district.</p>
+        <object type="text/html" data="plotly_map.html" width="100%" height="100%"></object>
+      </div>
+
+      <div class="container">
+        <h1>Incident Category Distribution </h1>
+        <p>
+          The bar plot shows the distribution of the latest 15,000 reported incidents. 
+        </p>
+        <object type="text/html" data="incident_category.html" width="100%" height="100%"></object>
+      </div>
+
+      <div class="container table-responsive">
+        <h1>Reported Incidents</h1>
+        <p>
+          The following table shows the last 5 entries in the SFPD incidents database. 
+        </p>
+        
+        
+
+      </div>
+
+
+      <div class="container">
+        <h1>SFPD District-specific Daily Crime Rates</h1>
+        <p>
+          The following graph shows the daily crime rate trend for each of the different police districts. 
+          The three districts with the highest crime rates are shown by default. You can activate other district's information by 
+          clicking on the boxes below.
+        </p>
+        <canvas class="my-4" id="districts_chart" width="900" height="380"></canvas>
+      </div>
+    </main>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="assets/js/vendor/popper.min.js"></script>
+    <script src="dist/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+    <script>
+        var ctx = document.getElementById("total_chart");
+        var myChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: [], // INCLUDE X AXIS DATES
+            datasets: [{
+              label: "Daily Incidents in San Francisco", 
+              data: [], // Total
+              lineTension: 0.1,
+              backgroundColor: 'transparent',
+              borderColor: '#007bff',
+              spanGaps:false,
+              borderWidth: 4,
+              pointBackgroundColor: '#007bff'
+            },
+            {
+            label: "Moving Average",
+            data: [], // Average
+            lineTension: 0.1,
+            backgroundColor: 'transparent',
+            borderColor: '#38a3a5',
+            spanGaps:false,
+            borderWidth: 4,
+            pointBackgroundColor: '#ebb734'
+            },
+            {
+            label: "AI Predictions",
+            data: [], // AI
+            lineTension: 0.1,
+            backgroundColor: 'transparent',
+            borderColor: '#ed3e3e',
+            spanGaps:false,
+            borderWidth: 4,
+            pointBackgroundColor: '#ebb734'
+            }
+          ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio : true,
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: false
+                },
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Crime Rate (per day)'
+                }
+              }]
+            },
+            legend: {
+              display: true,
+              labels : {
+                  useLineStyle: true
+              }
+          }
+          }
+        });
+      </script>
+
+
+    <script>
+      var ctx = document.getElementById("districts_chart");
+      var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: [], // INCLUDE X AXIS DATES
+          datasets: [{
+            label: "Bayview", 
+            data: [], // Bayview
+            lineTension: 0.1,
+            backgroundColor: 'transparent',
+            borderColor: '#22577a',
+            borderWidth: 4,
+            pointBackgroundColor: '#007bff',
+            hidden: true,
+          },
+          {
+            label: "Central",
+            data: [], // Central
+            lineTension: 0.1,
+            backgroundColor: 'transparent',
+            borderColor: '#38a3a5',
+            borderWidth: 4,
+            pointBackgroundColor: '#007bff'
+          },
+          {
+            label: "Ingleside",
+            data: [], // Ingleside
+            lineTension: 0.1,
+            backgroundColor: 'transparent',
+            borderColor: '#57cc99',
+            borderWidth: 4,
+            pointBackgroundColor: '#007bff',
+            hidden: true,
+          },
+          {
+            label: "Mission",
+            data: [], // Mission
+            lineTension: 0.1,
+            backgroundColor: 'transparent',
+            borderColor: '#80ed99',
+            borderWidth: 4,
+            pointBackgroundColor: '#007bff'
+          },
+          {
+            label: "Northern",
+            data: [], // Northern
+            lineTension: 0.1,
+            backgroundColor: 'transparent',
+            borderColor: '#c7f9cc',
+            borderWidth: 4,
+            pointBackgroundColor: '#007bff'
+          },
+          {
+            label: "Park",
+            data: [], // Park
+            lineTension: 0.1,
+            backgroundColor: 'transparent',
+            borderColor: '#ffba49',
+            borderWidth: 4,
+            pointBackgroundColor: '#007bff',
+            hidden: true,
+          },
+          {
+            label: "Richmond",
+            data: [], // Richmond
+            lineTension: 0.1,
+            backgroundColor: 'transparent',
+            borderColor: '#ef5b5b',
+            borderWidth: 4,
+            pointBackgroundColor: '#007bff',
+            hidden: true,
+          },
+          {
+            label: "Southern",
+            data: [], // Southern
+            lineTension: 0.1,
+            backgroundColor: 'transparent',
+            borderColor: '#23001e',
+            borderWidth: 4,
+            pointBackgroundColor: '#007bff',
+            hidden: true,
+          },
+          {
+            label: "Taraval",
+            data: [], // Taraval
+            lineTension: 0.1,
+            backgroundColor: 'transparent',
+            borderColor: '#efbdeb',
+            borderWidth: 4,
+            pointBackgroundColor: '#007bff',
+            hidden: true,
+          },
+          {
+            label: "Tenderloin",
+            data: [], // Tenderloin
+            lineTension: 0.1,
+            backgroundColor: 'transparent',
+            borderColor: '#00ffa6',
+            borderWidth: 4,
+            pointBackgroundColor: '#b68cb8',
+            hidden: true,
+          },
+        ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio : true,
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: false
+              },
+              scaleLabel: {
+                display: true,
+                labelString: 'Crime Rate (per day)'
+              }
+            }]
+          },
+          legend: {
+            display: true,
+            labels : {
+                useLineStyle: true
+            }
+        }
+        }
+      });
+    </script>
+
+
+
+
+
+  </body>
+</html>

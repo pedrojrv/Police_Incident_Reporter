@@ -1,0 +1,14 @@
+/* Show it's not fixed to the top */
+body {
+    min-height: 75rem;
+  }
+  
+  object {
+    height: 600px;
+  }
+  
+  /* Move down content because we have a fixed navbar that is 3.5rem tall */
+  body {
+    margin-top: 3.5rem;
+  }
+  
