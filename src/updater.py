@@ -4,6 +4,8 @@ import folium
 import config
 import json
 import plotly.express as px
+from sklearn.tree import DecisionTreeRegressor
+from datetime import datetime, timedelta
 
 # Example authenticated client (needed for non-public datasets):
 client = Socrata("data.sfgov.org",
@@ -138,3 +140,84 @@ fig = px.bar(incident_category, x='incident_category', y='Count',
 fig.update_layout(margin={"r":0,"t":40,"l":0,"b":0})
 fig.update_layout({'plot_bgcolor': 'rgba(0, 0, 0, 0)', 'paper_bgcolor': 'rgba(0, 0, 0, 0)'})
 fig.write_html("../incident_category.html")
+
+
+# results_ml = client.get("wg3w-h783", limit=500000, order="incident_date DESC")
+# df = pd.DataFrame.from_records(results_ml)
+
+df = pd.read_csv("../notebook/sfpd_reports.csv")
+
+df['incident_datetime'] = pd.to_datetime(df['incident_datetime'])
+df = df[~df['incident_category'].isnull()]
+df = df[~df['latitude'].isnull()]
+df = df[~df['police_district'].isnull()]
+df = df[["incident_datetime", "incident_day_of_week", "police_district", "incident_category"]]
+
+group_by_pd = df.copy()
+group_by_pd["Count"] = 1
+group_by_pd = group_by_pd.set_index(group_by_pd["incident_datetime"]).drop(columns=["incident_datetime"])
+group_by_pd = group_by_pd.groupby(['police_district']).resample('1D').sum()
+group_by_pd = group_by_pd.reset_index()
+
+X = group_by_pd.copy()
+X = pd.concat([X, pd.get_dummies(X["police_district"])], axis=1).drop(columns=["police_district"])
+X['month'] = pd.to_datetime(X['incident_datetime']).dt.month
+X['day'] = pd.to_datetime(X['incident_datetime']).dt.day
+X = X.iloc[:-10]
+
+y = X[["Count"]]
+X = X.drop(['incident_datetime', "Count"], axis=1)
+
+regr_1 = DecisionTreeRegressor()
+regr_1.fit(X, y)
+
+pd_districts = ['Bayview', 'Central', 'Ingleside', 'Mission', 'Northern', 
+                'Out of SF', 'Park', 'Richmond', 'Southern', 'Taraval', 
+                'Tenderloin']
+
+d = datetime.today() - timedelta(days=10)
+
+rng = pd.date_range(d, periods=10+2, freq='d')
+rng = pd.to_datetime(rng, format='%Y%m%d')
+
+dates_to_query = pd.DataFrame({ 'Date': rng}) 
+dates_to_query["year"] = dates_to_query.Date.dt.year
+dates_to_query["day"] = dates_to_query.Date.dt.day
+dates_to_query["month"] = dates_to_query.Date.dt.month
+dates_to_query["Date"] = dates_to_query.Date.dt.date
+
+predictions_dates = dates_to_query.Date.astype(str).values
+
+def get_prediction_for_dates_df(model, dates):
+    for i in pd_districts:
+        testing = pd.DataFrame(columns=X.columns)
+        data = pd.DataFrame({i: 1, 
+#                              "year":dates.year.values, 
+                             "month":dates.month.values, 
+                             "day":dates.day.values})
+        testing = testing.append(data).fillna(0)
+        y = model.predict(testing)
+        dates[i] = y.astype(int)
+    return dates
+
+dates_to_query = get_prediction_for_dates_df(regr_1, dates_to_query)
+dates_to_query["total_crime_rate"] = dates_to_query.iloc[:, 4:].sum(axis=1)
+dates_to_query = dates_to_query[["Date", "total_crime_rate"]]
+dates_to_query.columns = ["incident_datetime", "tcr"]
+dates_to_query.incident_datetime = dates_to_query.incident_datetime.astype(str)
+
+ai_predictions = total_df[["incident_datetime"]].iloc[:-2]
+ai_predictions = pd.merge(ai_predictions, dates_to_query, on="incident_datetime", how="outer").fillna("null")
+ai_predictions.loc[ai_predictions.index[50-11], 'tcr'] = total_df.loc[total_df.index[50-11], 'Count']
+
+# Read in the file
+with open('../index.html', 'r') as file :
+    filedata = file.read()
+    
+filedata = filedata.replace('            data: [], // AI', 
+                            '            data: {}, // AI'.format(
+                                list(ai_predictions.tcr.values)))
+
+# Write the file out again
+with open('../index.html', 'w') as file:
+    file.write(filedata)

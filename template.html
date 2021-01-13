@@ -113,18 +113,30 @@
               lineTension: 0.1,
               backgroundColor: 'transparent',
               borderColor: '#007bff',
+              spanGaps:false,
               borderWidth: 4,
               pointBackgroundColor: '#007bff'
             },
             {
-            label: "Average",
+            label: "Moving Average",
             data: [], // Average
             lineTension: 0.1,
             backgroundColor: 'transparent',
             borderColor: '#38a3a5',
+            spanGaps:false,
             borderWidth: 4,
             pointBackgroundColor: '#ebb734'
-          }
+            },
+            {
+            label: "AI Predictions",
+            data: [], // AI
+            lineTension: 0.1,
+            backgroundColor: 'transparent',
+            borderColor: '#ed3e3e',
+            spanGaps:false,
+            borderWidth: 4,
+            pointBackgroundColor: '#ebb734'
+            }
           ]
           },
           options: {
@@ -148,7 +160,8 @@
           }
         });
       </script>
-    
+
+
     <script>
       var ctx = document.getElementById("districts_chart");
       var myChart = new Chart(ctx, {

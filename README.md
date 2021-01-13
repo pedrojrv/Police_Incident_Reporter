@@ -17,3 +17,4 @@ The `notebook` directory contains the `main.ipynb` notebook. It contains all the
 Pedro Vicente-Valdez
 
 e-mail: vicentepedrojr@gmail.com
+
