@@ -17,8 +17,8 @@
 
   <body>
 
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-      <a class="navbar-brand" href="#">SFPD Reporter</a>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4 fixed-top">
+      <a class="navbar-brand" href="#">SFPD Incident Reporter</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -28,45 +28,54 @@
             <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="https://github.com/pedrojrv/Police_Incident_Reporter/tree/gh-pages">Code</a>
+            <a class="nav-link" href="main.html">Code</a>
           </li>
-          <!-- <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
-          </li> -->
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/pedrojrv/Police_Incident_Reporter/tree/gh-pages">GitHub</a>
+          </li>
         </ul>
       </div>
     </nav>
-
-    <main role="main" class="container">
-      <div class="jumbotron">
-        <h1>San Francisco Police Department Incident Reports - Crime Rate</h1>
-        <p class="lead">
-          This page updates daily and was created for educational purposes. It is by no means an official website. 
-          It does utilise the official SFPD database to extract all information needed. Not all incidents are reported in a timely manner. 
-          According to the dataset manager, the database is updated every day at 10:00 AM pacific. For more information on the main database visit the 
-          <a href="https://catalog.data.gov/is/dataset/police-department-incident-reports-2018-to-present">SFPD data.gov</a> website. 
-        </p>
-      </div>
-
-
+    
+    <!-- <div class="jumbotron">
       <div class="container">
-        <h1>Crime Rate Chloropleth Map</h1>
-        <p>The following map shows the weekly crime rate in each police district.</p>
-        <object type="text/html" data="plotly_map.html" width="100%" height="100%"></object>
+        <h1 class="display-3">Hello, world!</h1>
+        <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+        <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more »</a></p>
+      </div>
+    </div> -->
+
+    <main role="main">
+
+      
+      <div class="jumbotron">
+        <h1 class="display-3">SFPD Incident and Crime Reporter</h1>
+        <p class="lead">
+          This webiste provides information on the latest SFPD-reported incidents and crimes in San Francisco. This page updates daily and was 
+          created for educational purposes. To provide the information presented here, the SFPD database is queried daily. Additionally, an AI-powered 
+          model is used to present predictions on possible future crime rates. 
+        </p>
       </div>
 
       <div class="container">
         <h1>Daily Crime Rate in San Francisco</h1>
         <p>
-          The following graph shows the daily crime rate trend in the entire san francisco area and the five-day average.
+          The following graph shows the daily crime rate in the entire San Francisco area, the five-day average, and the AI-powered model predictions.
+          The most recent crime rates are not to be taken accurately. The incidents are not always reported in a timely manner by the SFPD.
         </p>
         <canvas class="my-4" id="total_chart" width="900" height="380"></canvas>
       </div>
 
       <div class="container">
+        <h1>Crime Rate Chloropleth Map</h1>
+        <p>This map shows the weekly crime rate in each police district.</p>
+        <object type="text/html" data="plotly_map.html" width="100%" height="100%"></object>
+      </div>
+
+      <div class="container">
         <h1>Incident Category Distribution </h1>
         <p>
-          The following bar plot shows the distribution of the latest 15,000 reported incidents. 
+          The bar plot shows the distribution of the latest 15,000 reported incidents. 
         </p>
         <object type="text/html" data="incident_category.html" width="100%" height="100%"></object>
       </div>
@@ -142,11 +151,11 @@
 
 
       <div class="container">
-        <h1>Daily Crime Rate in each San Francisco Police District</h1>
+        <h1>SFPD District-specific Daily Crime Rates</h1>
         <p>
           The following graph shows the daily crime rate trend for each of the different police districts. 
-          The three districts with the highest crime rates are shown by default. You can activate other district lines by 
-          clicking on the district box below.
+          The three districts with the highest crime rates are shown by default. You can activate other district's information by 
+          clicking on the boxes below.
         </p>
         <canvas class="my-4" id="districts_chart" width="900" height="380"></canvas>
       </div>
@@ -165,10 +174,10 @@
         var myChart = new Chart(ctx, {
           type: 'line',
           data: {
-            labels: ['2020-11-22', '2020-11-23', '2020-11-24', '2020-11-25', '2020-11-26', '2020-11-27', '2020-11-28', '2020-11-29', '2020-11-30', '2020-12-01', '2020-12-02', '2020-12-03', '2020-12-04', '2020-12-05', '2020-12-06', '2020-12-07', '2020-12-08', '2020-12-09', '2020-12-10', '2020-12-11', '2020-12-12', '2020-12-13', '2020-12-14', '2020-12-15', '2020-12-16', '2020-12-17', '2020-12-18', '2020-12-19', '2020-12-20', '2020-12-21', '2020-12-22', '2020-12-23', '2020-12-24', '2020-12-25', '2020-12-26', '2020-12-27', '2020-12-28', '2020-12-29', '2020-12-30', '2020-12-31', '2021-01-01', '2021-01-02', '2021-01-03', '2021-01-04', '2021-01-05', '2021-01-06', '2021-01-07', '2021-01-08', '2021-01-09', '2021-01-10', '2021-01-11'], // INCLUDE X AXIS DATES
+            labels: ['2020-11-23', '2020-11-24', '2020-11-25', '2020-11-26', '2020-11-27', '2020-11-28', '2020-11-29', '2020-11-30', '2020-12-01', '2020-12-02', '2020-12-03', '2020-12-04', '2020-12-05', '2020-12-06', '2020-12-07', '2020-12-08', '2020-12-09', '2020-12-10', '2020-12-11', '2020-12-12', '2020-12-13', '2020-12-14', '2020-12-15', '2020-12-16', '2020-12-17', '2020-12-18', '2020-12-19', '2020-12-20', '2020-12-21', '2020-12-22', '2020-12-23', '2020-12-24', '2020-12-25', '2020-12-26', '2020-12-27', '2020-12-28', '2020-12-29', '2020-12-30', '2020-12-31', '2021-01-01', '2021-01-02', '2021-01-03', '2021-01-04', '2021-01-05', '2021-01-06', '2021-01-07', '2021-01-08', '2021-01-09', '2021-01-10', '2021-01-11', '2021-01-12', '2021-01-13'], // INCLUDE X AXIS DATES
             datasets: [{
               label: "Daily Incidents in San Francisco", 
-              data: [306, 318, 351, 257, 411, 272, 281, 329, 357, 292, 298, 333, 332, 321, 294, 335, 342, 292, 359, 284, 236, 276, 301, 255, 310, 333, 326, 323, 301, 294, 300, 350, 258, 284, 260, 343, 317, 288, 346, 314, 275, 238, 271, 283, 272, 266, 294, 198, 188, 146], // Total
+              data: [306.0, 318.0, 351.0, 257.0, 411.0, 272.0, 281.0, 329.0, 357.0, 292.0, 298.0, 333.0, 332.0, 321.0, 294.0, 335.0, 342.0, 292.0, 359.0, 284.0, 236.0, 276.0, 301.0, 255.0, 310.0, 333.0, 326.0, 323.0, 301.0, 294.0, 300.0, 350.0, 258.0, 284.0, 260.0, 343.0, 317.0, 288.0, 346.0, 314.0, 275.0, 238.0, 271.0, 283.0, 272.0, 266.0, 294.0, 198.0, 188.0, 146.0, 'null', 'null'], // Total
               lineTension: 0.1,
               backgroundColor: 'transparent',
               borderColor: '#007bff',
@@ -178,7 +187,7 @@
             },
             {
             label: "Moving Average",
-            data: [328.6, 328.6, 328.6, 328.6, 328.6, 321.8, 314.4, 310.0, 330.0, 306.2, 311.4, 321.8, 322.4, 315.2, 315.6, 323.0, 324.8, 316.8, 324.4, 322.4, 302.6, 289.4, 291.2, 270.4, 275.6, 295.0, 305.0, 309.4, 318.6, 315.4, 308.8, 313.6, 300.6, 297.2, 290.4, 299.0, 292.4, 298.4, 310.8, 321.6, 308.0, 292.2, 288.8, 276.2, 267.8, 266.0, 277.2, 262.6, 243.6, 218.4], // Average
+            data: [328.6, 328.6, 328.6, 328.6, 328.6, 321.8, 314.4, 310.0, 330.0, 306.2, 311.4, 321.8, 322.4, 315.2, 315.6, 323.0, 324.8, 316.8, 324.4, 322.4, 302.6, 289.4, 291.2, 270.4, 275.6, 295.0, 305.0, 309.4, 318.6, 315.4, 308.8, 313.6, 300.6, 297.2, 290.4, 299.0, 292.4, 298.4, 310.8, 321.6, 308.0, 292.2, 288.8, 276.2, 267.8, 266.0, 277.2, 262.6, 243.6, 218.4, 'null', 'null'], // Average
             lineTension: 0.1,
             backgroundColor: 'transparent',
             borderColor: '#38a3a5',
@@ -188,7 +197,7 @@
             },
             {
             label: "AI Predictions",
-            data: ['null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 314, 349.0, 347.0, 365.0, 353.0, 327.0, 321.0, 343.0, 339.0, 365.0, 319.0, 380.0, 367.0], // AI
+            data: ['null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 'null', 314.0, 349.0, 347.0, 365.0, 353.0, 327.0, 321.0, 343.0, 339.0, 365.0, 319.0, 380.0, 367.0], // AI
             lineTension: 0.1,
             backgroundColor: 'transparent',
             borderColor: '#ed3e3e',
@@ -226,7 +235,7 @@
       var myChart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: ['2020-11-22', '2020-11-23', '2020-11-24', '2020-11-25', '2020-11-26', '2020-11-27', '2020-11-28', '2020-11-29', '2020-11-30', '2020-12-01', '2020-12-02', '2020-12-03', '2020-12-04', '2020-12-05', '2020-12-06', '2020-12-07', '2020-12-08', '2020-12-09', '2020-12-10', '2020-12-11', '2020-12-12', '2020-12-13', '2020-12-14', '2020-12-15', '2020-12-16', '2020-12-17', '2020-12-18', '2020-12-19', '2020-12-20', '2020-12-21', '2020-12-22', '2020-12-23', '2020-12-24', '2020-12-25', '2020-12-26', '2020-12-27', '2020-12-28', '2020-12-29', '2020-12-30', '2020-12-31', '2021-01-01', '2021-01-02', '2021-01-03', '2021-01-04', '2021-01-05', '2021-01-06', '2021-01-07', '2021-01-08', '2021-01-09', '2021-01-10', '2021-01-11'], // INCLUDE X AXIS DATES
+          labels: ['2020-11-23', '2020-11-24', '2020-11-25', '2020-11-26', '2020-11-27', '2020-11-28', '2020-11-29', '2020-11-30', '2020-12-01', '2020-12-02', '2020-12-03', '2020-12-04', '2020-12-05', '2020-12-06', '2020-12-07', '2020-12-08', '2020-12-09', '2020-12-10', '2020-12-11', '2020-12-12', '2020-12-13', '2020-12-14', '2020-12-15', '2020-12-16', '2020-12-17', '2020-12-18', '2020-12-19', '2020-12-20', '2020-12-21', '2020-12-22', '2020-12-23', '2020-12-24', '2020-12-25', '2020-12-26', '2020-12-27', '2020-12-28', '2020-12-29', '2020-12-30', '2020-12-31', '2021-01-01', '2021-01-02', '2021-01-03', '2021-01-04', '2021-01-05', '2021-01-06', '2021-01-07', '2021-01-08', '2021-01-09', '2021-01-10', '2021-01-11', '2021-01-12', '2021-01-13'], // INCLUDE X AXIS DATES
           datasets: [{
             label: "Bayview", 
             data: [18, 26, 38, 40, 36, 41, 21, 26, 35, 39, 35, 40, 27, 52, 23, 35, 32, 50, 42, 61, 23, 19, 33, 35, 37, 28, 33, 37, 43, 37, 31, 42, 47, 45, 24, 23, 46, 47, 34, 50, 30, 52, 23, 27, 26, 27, 37, 35, 21, 17, 21], // Bayview
