@@ -1,11 +1,21 @@
 # Police Incident Reporter
 
+First created as part of the <b>visualization course</b> of the IBM Data Science Specialization, this website was further developed to 
+provide information on incident and crime rate in various districts of the San Francisco area. Based on Python and JavaScript, 
+the website offers various graphics and even ML-powered crime rate predictions. Several models including Decision Trees, 
+K-Nearest-Neighbors, and Support Vector Machines were trained and optimized using grid search with cross validation due to the 
+dataset size (~12,000 datapoints).
+The webapp refreshes daily by querying and processing data from the official SFPD database.
 
 This repository hosts an unofficial SFPD incident reporter website:
 
 - https://pedrojrv.github.io/sfpd_incident_reporter/
 
-This website was created for educational purposes. The database is updated daily at 10:00 AM PST. The repository, and consequently the website, are also updated daily by simply running the `src/updater.py` script. More information on the official dataset can be found in the following websites:
+This website was created for educational purposes. The database is updated daily at 10:00 AM PST. The repository, and consequently the website, are also updated daily by simply running the `src/updater.py` script. 
+
+# Dataset Source
+
+More information on the official dataset can be found in the following websites:
 
 - https://data.sfgov.org/Public-Safety/Police-Department-Incident-Reports-2018-to-Present/wg3w-h783
 - https://data.sfgov.org/profile/edit/developer_settings
@@ -19,11 +29,11 @@ In this project we trained a series of algorithms including decision trees, supp
 
 Simpler algorithms like decision trees and support vector machines work well with datasets of this size. SVMs in particular are very powerful but are limited due to the computational complexity that rapidly increases with the number of training samples. These are appropriate to predict day-level predictions (due to reduction in data size). KNN models are also widely used in various tasks related to pattern recognition and were therefore also tested.
 
-Grid search with cross validation was used to search for the best set of parameters in all three models. While all models are closely competing, KNN were the clear winner with a Mean Absolute Error of 7.6. 
+Grid search with cross validation was used to search for the best set of parameters in all three models. Decision Trees frequently overfitted the dataset, even after applying heavier regularization. Support Vector Machines showed robustness towards overfitting and good generalization. However, in almost all instances, KNN models outperformed both DTs and SVMs. The best KNN model had a Mean Absolute Error of 7.6 crimes per day on the validation set as seen in the table below.
 
 <center>
 
-| Algorithm      | Validation MAE |
+| Algorithm (Best Model)     | Validation MAE |
 | ----------- | ----------- |
 | Decision Trees      | 7.86295       |
 | K-Nearest Neighbors   | 7.45178        |
@@ -31,7 +41,7 @@ Grid search with cross validation was used to search for the best set of paramet
 
 </center>
 
-Advance algorithms like LSTMs and RNNs are appropriate for these types of time-series dataset. However, the type of algorithm is somewhat constrained by the dataset size. For DNNs, larger amounts of data are preferred and were therefore not tested here. 
+Advance algorithms like LSTMs and RNNs are also appropriate for these types of time-series dataset. However, these types of algorithm may not be trained effectively due to the dataset size. For DNNs, larger amounts of data are preferred and were therefore not tested here. 
 
 # Contact
 
